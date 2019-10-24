@@ -59,5 +59,3 @@
     )
   )
 )
-
-(lcs "AGGTAB" "GXTXAYB")
