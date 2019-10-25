@@ -1,40 +1,53 @@
 #lang racket
-(require rackunit)
-(require rackunit/text-ui)
 (provide dice)
 
-(define (dice-match text1 text2 indice)
+(define (bigrams text lista indice)
   (cond
-    [(empty? text1) 0]
-    [(empty? text2) 0]
-    [(< (string-length text1) 2) 0]
-    [(< (string-length text2) 2) 0]
-    [(cond 
-      [(and 
-        (< (- (string-length text1) indice) 2)
-        (< (- (string-length text2) indice) 2))
-        0
-      ]
-      [(equal? 
-        (substring text1 indice (+ indice 2))
-        (substring text2 indice (+ indice 2)))
-        (+ 2 (dice-match text1 text2 (+ indice 1)))
-      ]
-      [else (dice-match text1 text2 (+ indice 1))]
-    )]
+    [(> (+ indice 2) (string-length text)) lista]
+    [else 
+      (bigrams 
+        text
+        (append lista (list (substring text indice (+ indice 2))))
+        (add1 indice)
+      )
+    ]
+  )
+)
+
+(define (dice-match list1 list2 i j contador)
+  (cond
+    [(>= i (length list1)) contador]
+    [(>= j (length list2)) (dice-match list1 list2 (add1 i) 0 contador)]
+    [(string=? (list-ref list1 i) (list-ref list2 j)) 
+      (dice-match
+        list1
+        (remove (list-ref list2 j) list2)
+        i
+        (add1 j)
+        (add1 contador)
+      )
+    ]
+    [else 
+      (dice-match
+        list1
+        list2
+        i
+        (add1 j)
+        contador
+      )
+    ]
   )
 )
 
 (define (dice text1 text2)
-  (if (equal? text1 text2)
-    1
-    (exact->inexact
-      (/ 
-        (dice-match text1 text2 0)
-        (+ 
-          (- (string-length text1) 1)
-          (- (string-length text2) 1)
-        )
+  (define bigram1 (bigrams text1 (list) 0))
+  (define bigram2 (bigrams text2 (list) 0))
+  (exact->inexact
+    (/ 
+      (* 2 (dice-match bigram1 bigram2 0 0 0))
+      (+ 
+        (length bigram1)
+        (length bigram2)
       )
     )
   )
