@@ -39,6 +39,10 @@
   )
 )
 
+;;; O algoritmo Dice’s coefficient é definido como
+;;; o dobro do número de termos comuns nas cadeias comparadas
+;;; dividido pelo número total de termos nas duas cadeias.
+
 (define (dice text1 text2)
   (define bigram1 (bigrams text1 (list) 0))
   (define bigram2 (bigrams text2 (list) 0))

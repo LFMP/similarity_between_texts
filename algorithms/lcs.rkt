@@ -40,7 +40,9 @@
     ]
   )
 )
-
+;;; O algoritmo LCS considera que a semelhançaentre duas cadeias
+;;; se baseia no comprimento da cadeia contígua de caracteres
+;;; que existe nas duas cadeias.
 (define (lcs text1 text2)
   (exact->inexact 
     (/ 
