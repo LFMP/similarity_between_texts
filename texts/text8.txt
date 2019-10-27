@@ -1,0 +1,6 @@
+#include <stdio.h>
+
+int main(){
+  printf("Hello guys, today is a god day.");
+  return 0;
+}
